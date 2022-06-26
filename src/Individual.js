@@ -1,7 +1,6 @@
 import './Individual.css';
 
 export const Individual = ({ position }) => {
-  console.log(position);
   return (
     <span
       data-testid='individual'

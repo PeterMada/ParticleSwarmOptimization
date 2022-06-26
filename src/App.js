@@ -69,7 +69,20 @@ function App() {
 
   return (
     <div className='app'>
-      <header className='header'>Header</header>
+      <header className='header'>
+        Header
+        <label htmlFor='populationSize'>Population size</label>
+        <input
+          min='1'
+          max='99'
+          step='1'
+          type='number'
+          id='populationSize'
+          value='1'
+          readOnly
+        />
+        <button>Generate population</button>
+      </header>
       <div className='canvas' onMouseDown={handleMouseMove}>
         <Individual position={indivudalPosition} />
 
