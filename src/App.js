@@ -1,23 +1,80 @@
-import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
+import { Transition } from 'react-transition-group';
+import { Individual } from './Individual';
+
+const INVIDUALS_IN_POPULATION = 2;
+const ITERATION_DURATION = 100; // ms
 
 function App() {
+  const [indivudalPosition, setindivudalPosition] = useState({
+    x: 1,
+    y: 1,
+  });
+
+  const [mouseCoordinates, setMouseCoordinates] = useState({ x: 0, y: 0 });
+  const [mouseCoordinatesGlobal, setMouseCoordinatesGlobal] = useState({
+    x: 0,
+    y: 0,
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setindivudalPosition((prevPosition) => {
+        if (
+          mouseCoordinates.x - indivudalPosition.x < 10 &&
+          mouseCoordinates.x - indivudalPosition.x > 0 &&
+          mouseCoordinates.y - indivudalPosition.y > 0 &&
+          mouseCoordinates.y - indivudalPosition.y < 10
+        ) {
+          return true;
+        }
+        return {
+          x:
+            mouseCoordinates.x - indivudalPosition.x > 0
+              ? indivudalPosition.x + 10
+              : indivudalPosition.x - 10,
+          y:
+            mouseCoordinates.y - indivudalPosition.y > 0
+              ? indivudalPosition.y + 10
+              : indivudalPosition.y - 10,
+        };
+      });
+    }, ITERATION_DURATION);
+
+    return () => clearInterval(timer);
+  });
+
+  /*
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      setMouseCoordinatesGlobal({
+        x: event.screen.x,
+        y: event.screen.y,
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => window.addEventListener('mousemove', handleMouseMove);
+  }, []);
+  */
+
+  const handleMouseMove = (event) => {
+    setMouseCoordinates({
+      x: event.clientX - event.target.offsetLeft,
+      y: event.clientY - event.target.offsetTop,
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='app'>
+      <header className='header'>Header</header>
+      <div className='canvas' onMouseDown={handleMouseMove}>
+        <Individual position={indivudalPosition} />
+
+        <pre>{`Coords: ${mouseCoordinates.x} ${mouseCoordinates.y}`}</pre>
+      </div>
     </div>
   );
 }
