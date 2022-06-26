@@ -7,6 +7,7 @@ const INVIDUALS_IN_POPULATION = 2;
 const ITERATION_DURATION = 100; // ms
 
 function App() {
+  const [populationSize, setPopulationSize] = useState(1);
   const [indivudalPosition, setindivudalPosition] = useState({
     x: 1,
     y: 1,
@@ -67,6 +68,10 @@ function App() {
     });
   };
 
+  const handlePopulationSize = (event) => {
+    setPopulationSize(event.target.value);
+  };
+
   return (
     <div className='app'>
       <header className='header'>
@@ -78,8 +83,8 @@ function App() {
           step='1'
           type='number'
           id='populationSize'
-          value='1'
-          readOnly
+          value={populationSize}
+          onChange={handlePopulationSize}
         />
         <button>Generate population</button>
       </header>

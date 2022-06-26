@@ -1,4 +1,6 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
 import App from './App';
 
 describe('App', () => {
@@ -36,6 +38,14 @@ describe('App', () => {
     it('has default value set to 1', () => {
       render(<App />);
       expect(screen.getByLabelText(/population size/i).value).toBe('1');
+    });
+
+    it('change value on change', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+      userEvent.clear(screen.getByLabelText(/population size/i));
+      await user.type(screen.getByLabelText(/population size/i), '55');
+      expect(screen.getByLabelText(/population size/i).value).toBe('55');
     });
   });
 });
