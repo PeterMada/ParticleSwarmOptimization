@@ -7,7 +7,10 @@ const INVIDUALS_IN_POPULATION = 2;
 const ITERATION_DURATION = 100; // ms
 
 function App() {
-  const [populationSize, setPopulationSize] = useState(1);
+  const [populationSize, setPopulationSize] = useState(10);
+  const [populationSizeInput, setPopulationSizeInput] = useState(1);
+  const [population, setPoupulation] = useState([]);
+
   const [indivudalPosition, setindivudalPosition] = useState({
     x: 1,
     y: 1,
@@ -46,6 +49,23 @@ function App() {
     return () => clearInterval(timer);
   });
 
+  const generateRandomPopulation = () => {
+    let newPopulation = [];
+
+    for (let i = 0; i < parseInt(populationSize); i++) {
+      newPopulation.push({
+        x: Math.floor(Math.random() * 600),
+        y: Math.floor(Math.random() * 600),
+      });
+    }
+
+    setPoupulation(newPopulation);
+  };
+
+  useEffect(() => {
+    generateRandomPopulation();
+  }, [populationSize]);
+
   /*
   useEffect(() => {
     const handleMouseMove = (event) => {
@@ -69,7 +89,11 @@ function App() {
   };
 
   const handlePopulationSize = (event) => {
-    setPopulationSize(event.target.value);
+    setPopulationSizeInput(event.target.value);
+  };
+
+  const handleGeneratePopulation = () => {
+    setPopulationSize(populationSizeInput);
   };
 
   return (
@@ -83,13 +107,17 @@ function App() {
           step='1'
           type='number'
           id='populationSize'
-          value={populationSize}
+          value={populationSizeInput}
           onChange={handlePopulationSize}
         />
-        <button>Generate population</button>
+        <button onClick={handleGeneratePopulation}>
+          Generate population
+        </button>
       </header>
       <div className='canvas' onMouseDown={handleMouseMove}>
-        <Individual position={indivudalPosition} />
+        {population.map((_, i) => (
+          <Individual position={indivudalPosition} key={i} />
+        ))}
 
         <pre>{`Coords: ${mouseCoordinates.x} ${mouseCoordinates.y}`}</pre>
       </div>

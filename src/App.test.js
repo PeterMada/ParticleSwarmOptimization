@@ -48,4 +48,17 @@ describe('App', () => {
       expect(screen.getByLabelText(/population size/i).value).toBe('55');
     });
   });
+
+  describe('Population generation', () => {
+    it('generate right ammount of individuals on generate button click', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+      userEvent.clear(screen.getByLabelText(/population size/i));
+      await user.type(screen.getByLabelText(/population size/i), '55');
+      await user.click(
+        screen.getByRole('button', { name: /generate population/i })
+      );
+      expect(screen.queryAllByTestId('individual').length).toBe(55);
+    });
+  });
 });
