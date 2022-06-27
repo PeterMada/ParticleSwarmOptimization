@@ -60,5 +60,18 @@ describe('App', () => {
       );
       expect(screen.queryAllByTestId('individual').length).toBe(55);
     });
+
+    it('generate right ammount of individuals on generate another button click', async () => {
+      const user = userEvent.setup();
+      render(<App />);
+      userEvent.clear(screen.getByLabelText(/population size/i));
+      await user.type(screen.getByLabelText(/population size/i), '55');
+      userEvent.clear(screen.getByLabelText(/population size/i));
+      await user.type(screen.getByLabelText(/population size/i), '256');
+      await user.click(
+        screen.getByRole('button', { name: /generate population/i })
+      );
+      expect(screen.queryAllByTestId('individual').length).toBe(256);
+    });
   });
 });
