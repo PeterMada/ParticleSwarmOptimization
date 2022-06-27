@@ -11,17 +11,13 @@ function App() {
   const [populationSizeInput, setPopulationSizeInput] = useState(1);
   const [population, setPoupulation] = useState([]);
 
-  const [indivudalPosition, setindivudalPosition] = useState({
-    x: 1,
-    y: 1,
-  });
-
   const [mouseCoordinates, setMouseCoordinates] = useState({ x: 0, y: 0 });
   const [mouseCoordinatesGlobal, setMouseCoordinatesGlobal] = useState({
     x: 0,
     y: 0,
   });
 
+  /*
   useEffect(() => {
     const timer = setInterval(() => {
       setindivudalPosition((prevPosition) => {
@@ -48,14 +44,15 @@ function App() {
 
     return () => clearInterval(timer);
   });
+  */
 
   const generateRandomPopulation = () => {
     let newPopulation = [];
 
     for (let i = 0; i < parseInt(populationSize); i++) {
       newPopulation.push({
-        x: Math.floor(Math.random() * 600),
-        y: Math.floor(Math.random() * 600),
+        x: Math.floor(Math.random() * global.innerWidth),
+        y: Math.floor(Math.random() * (global.innerHeight - 50)),
       });
     }
 
@@ -115,9 +112,9 @@ function App() {
         </button>
       </header>
       <div className='canvas' onMouseDown={handleMouseMove}>
-        {population.map((_, i) => (
-          <Individual position={indivudalPosition} key={i} />
-        ))}
+        {population.map((indivudalPosition, i) => {
+          return <Individual position={indivudalPosition} key={i} />;
+        })}
 
         <pre>{`Coords: ${mouseCoordinates.x} ${mouseCoordinates.y}`}</pre>
       </div>

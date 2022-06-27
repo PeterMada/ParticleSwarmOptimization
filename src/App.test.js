@@ -73,5 +73,35 @@ describe('App', () => {
       );
       expect(screen.queryAllByTestId('individual').length).toBe(256);
     });
+
+    it('does not generate individuals outside window', async () => {
+      global.innerWidth = 5;
+      global.innerHeight = 55;
+      const user = userEvent.setup();
+      render(<App />);
+
+      userEvent.clear(screen.getByLabelText(/population size/i));
+      await user.type(screen.getByLabelText(/population size/i), '1000');
+      await user.click(
+        screen.getByRole('button', { name: /generate population/i })
+      );
+
+      const allGeneratedIndividuals = screen.getAllByTestId('individual');
+
+      allGeneratedIndividuals.map((individual) => {
+        expect(parseInt(individual.dataset.positionX)).toBeLessThanOrEqual(
+          5
+        );
+        expect(
+          parseInt(individual.dataset.positionX)
+        ).toBeGreaterThanOrEqual(0);
+        expect(parseInt(individual.dataset.positionY)).toBeLessThanOrEqual(
+          5
+        );
+        expect(
+          parseInt(individual.dataset.positionY)
+        ).toBeGreaterThanOrEqual(0);
+      });
+    });
   });
 });
